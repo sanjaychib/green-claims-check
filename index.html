@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Claims Check</title><style>:root{--ink:#182033;--muted:#617084;--bg:#f5f7fb;--panel:#fff;--line:#dce3ec;--accent:#275df5;--accent-soft:#edf2ff;--good:#16745f;--good-soft:#e9f7f2;--warn-soft:#fff5d9;--bad:#b54b3d;--bad-soft:#fff0ed}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.5}
+button{font:inherit}button:focus-visible,a:focus-visible{outline:3px solid #111;outline-offset:3px}
+.wrap{width:min(980px,calc(100% - 24px));margin:0 auto;padding:18px 0 40px}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(245,247,251,.96);backdrop-filter:blur(8px);padding:10px 0}
+.toprow{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:8px}
+.kicker{font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.step{font-size:.84rem;color:var(--muted)}
+.track{height:8px;background:#dde4ee;border-radius:999px;overflow:hidden}.bar{height:100%;width:0;background:var(--accent);transition:width .25s ease}
+.screen{display:none;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:30px;box-shadow:0 12px 28px rgba(24,32,51,.07)}.screen.active{display:block}
+.hero{background:linear-gradient(135deg,#fff 0%,#eef3ff 100%)}
+.badge{display:inline-block;padding:7px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+h1{font-size:clamp(2.1rem,5vw,4rem);line-height:1.04;letter-spacing:-.03em;margin:16px 0 14px;max-width:820px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);line-height:1.12;margin:12px 0 10px}h3{font-size:1.02rem;margin:0 0 6px}
+p{margin:0 0 14px}.lead{font-size:1.1rem;color:var(--muted);max-width:760px}.small{font-size:.9rem;color:var(--muted)}
+.nav{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:24px}
+.btn{border:0;border-radius:12px;padding:12px 17px;font-weight:800;cursor:pointer}.primary{background:var(--accent);color:#fff}.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.context{margin-top:18px;padding:16px;border:1px solid var(--line);border-radius:15px;background:#fafbfd}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+.card{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fff}.card .src{display:block;font-size:.78rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.item{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fff;margin-top:14px}
+.item .quote{font-weight:700;font-size:1.05rem;margin-bottom:12px}
+.choices{display:flex;flex-wrap:wrap;gap:8px}
+.choice{border:1px solid var(--line);background:#fafbfd;border-radius:11px;padding:9px 13px;cursor:pointer;font-weight:700;font-size:.92rem}
+.choice:hover{border-color:var(--accent)}.choice.right{background:var(--good-soft);border-color:var(--good);color:var(--good)}.choice.wrong{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.choice:disabled{cursor:default}
+.fb{display:none;margin-top:12px;padding:13px 15px;border-radius:12px;font-size:.94rem}.fb.show{display:block}.fb.good{background:var(--good-soft)}.fb.bad{background:var(--warn-soft)}
+.fb .rule{display:block;font-size:.8rem;font-weight:800;color:var(--muted);margin-top:6px}
+.score{font-size:clamp(2.4rem,6vw,3.6rem);font-weight:900;color:var(--accent);margin:6px 0}
+.takeaway{margin-top:18px;padding:17px;border-radius:15px;background:linear-gradient(135deg,var(--accent-soft),#fff);border:1px solid #cad7ff}
+.aid{border:2px solid var(--ink);border-radius:18px;padding:22px;margin-top:18px;background:#fff}
+.aid ol{margin:10px 0 0;padding-left:22px}.aid li{margin-bottom:10px}
+.level{border-radius:15px;padding:16px;border:1px solid var(--line);background:#fff}.level strong{display:block;margin-bottom:4px}
+.l1{border-top:5px solid #b54b3d}.l2{border-top:5px solid #d08a00}.l3{border-top:5px solid #275df5}.l4{border-top:5px solid #16745f}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}.flowstep{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff;text-align:center;font-weight:700}
+.credit{margin-top:18px;font-size:.88rem;color:var(--muted)}
+.disclaimer{font-size:.82rem;color:var(--muted);margin-top:14px}
+@media(max-width:760px){.screen{padding:22px}.grid2,.grid3,.grid4,.flow{grid-template-columns:1fr}}
+@media print{.topbar,.nav,.noprint{display:none!important}.screen{display:none!important;box-shadow:none;border:0}.screen.active{display:block!important}body{background:#fff}}
+</style></head><body><div class="wrap">
+<div class="topbar"><div class="toprow"><div class="kicker">Interactive practice · Sustainability</div><div class="step" id="stepText">1</div></div>
+<div class="track" role="progressbar" aria-valuemin="1" id="progress"><div class="bar" id="bar"></div></div></div>
+
+<section class="screen hero" data-screen="0">
+<span class="badge">Sustainability claims · AI-drafted copy</span>
+<h1>Would this green claim pass?</h1>
+<p class="lead">An AI tool has drafted product copy with several environmental claims. Before it is published, check each one against the rules that now apply to green claims in the EU.</p>
+<div class="context"><strong>Illustrative scenario.</strong> Fictional product and company. The rules are summarised for learning purposes and are not legal advice.</div>
+<div class="nav"><span></span><button class="btn primary next" type="button">Start</button></div></section>
+
+<section class="screen" data-screen="1">
+<span class="badge">1 · The rules in brief</span><h2>What you are checking against</h2>
+<div class="grid2">
+<div class="card"><span class="src">EU Directive 2024/825</span><h3>Empowering consumers for the green transition</h3><p class="small">Applies from 27 September 2026 to commercial practices aimed at EU consumers, including Swiss companies selling into the EU. It adds these to the list of practices that are always unfair:</p>
+<ul class="small"><li>generic claims such as “eco-friendly” without recognised excellent performance</li><li>neutral or reduced emission claims based on offsetting</li><li>sustainability labels not based on a certification scheme or public authority</li><li>presenting legal requirements as a special feature</li><li>claims about the whole product when they apply only to part of it</li></ul></div>
+<div class="card"><span class="src">ISO 14021</span><h3>Self-declared environmental claims</h3><p class="small">The international standard for claims a company makes about its own products. Claims should be accurate, specific, verifiable and not misleading. Vague terms like “environmentally friendly” or “green” should not be used.</p></div>
+</div>
+<div class="takeaway">The test is simple to state: <strong>is the claim specific, true for what it covers, and can you prove it?</strong></div>
+<div class="nav"><button class="btn secondary prev" type="button">Back</button><button class="btn primary next" type="button">Check the claims</button></div></section>
+
+<section class="screen" data-screen="2">
+<span class="badge">2 · Review the AI draft</span><h2>Six claims from the draft product page</h2>
+<p class="lead">For each claim, decide: is it acceptable if you hold the evidence, or is it not allowed as written?</p>
+<div id="items"></div>
+<div class="nav"><button class="btn secondary prev" type="button">Back</button><button class="btn primary next" type="button">See your result</button></div></section>
+
+<section class="screen" data-screen="3" data-result>
+<span class="badge">3 · Result</span><h2>Your review</h2>
+<div class="score" id="scoreNum">0 / 6</div><p class="lead" id="scoreMsg"></p>
+<div class="takeaway"><strong>Why this matters for AI-drafted copy.</strong> AI tools reproduce the marketing language they were trained on, and much of it uses exactly the phrases now banned. A human check against the rules has to sit between the draft and publication.</div>
+<div class="nav"><button class="btn secondary prev" type="button">Back</button><button class="btn primary next" type="button">Get the checklist</button></div></section>
+
+<section class="screen" data-screen="4">
+<span class="badge">4 · Take it to work</span><h2>Green claim checklist</h2>
+<div class="aid"><h3>Five questions before any environmental claim goes out</h3><ol>
+<li><strong>Is it specific?</strong> Replace general words (green, eco, sustainable, natural) with a measurable fact.</li>
+<li><strong>Does it cover what it says?</strong> If it applies to the packaging only, say packaging.</li>
+<li><strong>Can we prove it today?</strong> Name the document that backs it up: test report, certificate, supplier data.</li>
+<li><strong>Does it rely on offsetting?</strong> Then do not call the product neutral or reduced. Report actual reductions and offsetting separately.</li>
+<li><strong>Is it just the law?</strong> Do not present a legal requirement as a special feature. Use only labels from certification schemes or public authorities.</li></ol>
+<p class="small" style="margin-top:12px">Based on EU Directive 2024/825 and ISO 14021. Summary for training use, not legal advice.</p></div>
+<div class="nav"><button class="btn secondary prev" type="button">Back</button><span><button class="btn secondary print noprint" type="button">Print checklist</button> <button class="btn primary next" type="button">How this was designed</button></span></div></section>
+
+<section class="screen" data-screen="5">
+<span class="badge">Design approach</span><h2>Built around a real standard, ending in a job aid</h2>
+<div class="flow"><div class="flowstep">Real rule</div><div class="flowstep">Realistic decisions</div><div class="flowstep">Feedback that cites the rule</div><div class="flowstep">Job aid for daily use</div></div>
+<div class="takeaway">The learner does not memorise the regulation. They practise the judgement the regulation requires, then leave with a checklist they can use on the next draft.</div>
+<p class="credit">Sanjay Chib</p>
+<div class="nav"><button class="btn secondary prev" type="button">Back</button><button class="btn primary restart" type="button">Restart</button></div></section>
+
+</div><script>function initSim(items){
+  const screens=[...document.querySelectorAll('.screen')];
+  const bar=document.getElementById('bar'),stepText=document.getElementById('stepText'),progress=document.getElementById('progress');
+  let current=0;
+  function show(n){current=Math.max(0,Math.min(n,screens.length-1));screens.forEach((s,i)=>s.classList.toggle('active',i===current));
+    bar.style.width=((current+1)/screens.length*100)+'%';stepText.textContent=(current+1)+' of '+screens.length;
+    progress.setAttribute('aria-valuenow',String(current+1));progress.setAttribute('aria-valuemax',String(screens.length));
+    if(screens[current].dataset.result!==undefined)renderScore();window.scrollTo({top:0,behavior:'smooth'});}
+  document.querySelectorAll('.next').forEach(b=>b.addEventListener('click',()=>show(current+1)));
+  document.querySelectorAll('.prev').forEach(b=>b.addEventListener('click',()=>show(current-1)));
+  document.querySelectorAll('.restart').forEach(b=>b.addEventListener('click',()=>location.reload()));
+  document.querySelectorAll('.print').forEach(b=>b.addEventListener('click',()=>window.print()));
+  const answered={};
+  const host=document.getElementById('items');
+  items.forEach((it,idx)=>{
+    const d=document.createElement('div');d.className='item';
+    d.innerHTML='<div class="small">'+(idx+1)+' of '+items.length+'</div><div class="quote">'+it.text+'</div><div class="choices"></div><div class="fb" aria-live="polite"></div>';
+    const ch=d.querySelector('.choices'),fb=d.querySelector('.fb');
+    it.options.forEach(op=>{const b=document.createElement('button');b.type='button';b.className='choice';b.textContent=op;
+      b.addEventListener('click',()=>{if(answered[idx]!==undefined)return;const ok=op===it.answer;answered[idx]=ok;
+        ch.querySelectorAll('.choice').forEach(x=>{x.disabled=true;if(x.textContent===it.answer)x.classList.add('right');});
+        if(!ok)b.classList.add('wrong');
+        fb.className='fb show '+(ok?'good':'bad');
+        fb.innerHTML='<strong>'+(ok?'Correct. ':'Not quite. The answer is "'+it.answer+'". ')+'</strong>'+it.why+(it.better?'<br><br><strong>Better:</strong> '+it.better:'')+'<span class="rule">'+it.rule+'</span>';});
+      ch.appendChild(b);});
+    host.appendChild(d);});
+  function renderScore(){const n=Object.values(answered).filter(Boolean).length,t=Object.keys(answered).length;
+    document.getElementById('scoreNum').textContent=n+' / '+items.length;
+    document.getElementById('scoreMsg').textContent=t<items.length?'You answered '+t+' of '+items.length+'. Go back to finish the rest.':(n===items.length?'All correct. You are applying the rules, not guessing.':'Review the feedback on the ones you missed: those are the patterns that cause real problems.');}
+  show(0);
+}
+
+initSim([{"text": "“Our new packaging is eco-friendly.”", "options": ["OK with evidence", "Not allowed as written"], "answer": "Not allowed as written", "why": "“Eco-friendly” is a generic environmental claim. Under the EU rules it is banned unless the trader can show recognised excellent environmental performance relevant to the claim. ISO 14021 also says vague claims like this should not be used.", "better": "“Packaging made from 80% recycled cardboard.” (if true and documented)", "rule": "EU Directive 2024/825, generic environmental claims · ISO 14021, vague claims"}, {"text": "“Climate-neutral delivery: we offset all emissions.”", "options": ["OK with evidence", "Not allowed as written"], "answer": "Not allowed as written", "why": "Claims that a product has a neutral, reduced or positive impact on greenhouse gas emissions on the basis of offsetting are banned. Offsetting can still be reported, but separately and factually.", "better": "“We have cut delivery emissions by 25% since 2022 by switching to electric vans. We also fund certified carbon projects.”", "rule": "EU Directive 2024/825, neutrality claims based on offsetting"}, {"text": "“Bottle made from 50% recycled plastic (cap excluded).”", "options": ["OK with evidence", "Not allowed as written"], "answer": "OK with evidence", "why": "This is specific, measurable and states its scope. It is acceptable provided you hold evidence for the figure, for example supplier certificates.", "rule": "ISO 14021, specific and verifiable claims"}, {"text": "“Now CFC-free!” (CFCs are already banned in this product by law)", "options": ["OK with evidence", "Not allowed as written"], "answer": "Not allowed as written", "why": "Presenting a legal requirement that applies to all products as if it were a special feature of yours is banned as misleading.", "better": "Remove the claim, or highlight something that genuinely goes beyond the legal minimum.", "rule": "EU Directive 2024/825, legal requirements presented as a distinctive feature"}, {"text": "A “Green Choice” badge the marketing team designed for the product page", "options": ["OK with evidence", "Not allowed as written"], "answer": "Not allowed as written", "why": "A sustainability label must be based on a certification scheme or established by public authorities. A self-made badge does not qualify.", "better": "Use a recognised, independently certified label, or drop the badge and state the specific fact behind it.", "rule": "EU Directive 2024/825, sustainability labels"}, {"text": "“Uses 30% less energy than our 2023 model, tested to the same EN standard.”", "options": ["OK with evidence", "Not allowed as written"], "answer": "OK with evidence", "why": "A comparative claim is fine when it is specific, the basis of comparison is clear and the test method is stated. Keep the test reports.", "rule": "ISO 14021, comparative claims"}]);</script></body></html>
